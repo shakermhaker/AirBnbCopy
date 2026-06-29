@@ -19,7 +19,12 @@ namespace Entities.Concrete
 
         // Navigation Properties
         public ICollection<UserOperationClaim> UserOperationClaims { get; set; } = new List<UserOperationClaim>();
+        public ICollection<RentalHouse> RentalHouses { get; set; } = new List<RentalHouse>();
+        public ICollection<UserList> UserLists { get; set; } = new List<UserList>();
+        public ICollection<UserList> OwnedLists { get; set; } = new List<UserList>();
 
-        
+
+
+
     }
 }

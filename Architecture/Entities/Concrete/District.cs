@@ -15,6 +15,6 @@ namespace Entities.Concrete
         public City City { get; set; } = null!;
 
         // Navigation Property
-        public ICollection<Business> Businesses { get; set; } = new List<Business>();
+        public ICollection<RentalHouse> RentalHouses { get; set; } = new List<RentalHouse>();
     }
 }

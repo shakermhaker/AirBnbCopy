@@ -1,0 +1,19 @@
+﻿using Core.Entities;
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace Entities.Concrete
+{
+    public class RentalHouseDatePrice : IEntity
+    {
+        public int Id { get; set; }
+
+        public int RentalHouseId { get; set; }
+        public RentalHouse RentalHouse { get; set; } = null!;
+
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
+        public decimal Price { get; set; }
+    }
+}

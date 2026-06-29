@@ -10,11 +10,11 @@ using System.Text;
 
 namespace DataAccess.Concrete.EntityFramework
 {
-    public class EfUserDal : EfEntityRepositoryBase<User, FootballFieldContext>, IUserDal
+    public class EfUserDal : EfEntityRepositoryBase<User, AirBnbCopyContext>, IUserDal
     {
         public List<OperationClaim> GetClaims(ICoreUser user)
         {
-            using (var context = new FootballFieldContext())
+            using (var context = new AirBnbCopyContext())
             {
                 var result = from operationClaim in context.OperationClaims
                              join userOperationClaim in context.UserOperationClaims

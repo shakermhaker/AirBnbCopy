@@ -3,7 +3,6 @@ using System;
 using FootballField.DataAccess.Concrete.EntityFramework;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,12 +10,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace DataAccess.Migrations
 {
-    [DbContext(typeof(FootballFieldContext))]
-    [Migration("20260627210416_InitialPostgresModel")]
-    partial class InitialPostgresModel
+    [DbContext(typeof(AirBnbCopyContext))]
+    partial class AirBnbCopyContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -24,37 +21,6 @@ namespace DataAccess.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
-
-            modelBuilder.Entity("Entities.Concrete.Business", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("DistrictId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("FullAddress")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DistrictId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Businesses");
-                });
 
             modelBuilder.Entity("Entities.Concrete.City", b =>
                 {
@@ -71,23 +37,6 @@ namespace DataAccess.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Cities");
-                });
-
-            modelBuilder.Entity("Entities.Concrete.Day", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Days");
                 });
 
             modelBuilder.Entity("Entities.Concrete.District", b =>
@@ -112,7 +61,7 @@ namespace DataAccess.Migrations
                     b.ToTable("Districts");
                 });
 
-            modelBuilder.Entity("Entities.Concrete.FieldPriceSchedule", b =>
+            modelBuilder.Entity("Entities.Concrete.List", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -120,49 +69,16 @@ namespace DataAccess.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("DayId")
-                        .HasColumnType("integer");
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("FootballFieldId")
-                        .HasColumnType("integer");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("numeric");
-
-                    b.Property<int>("TimeSlotId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DayId");
-
-                    b.HasIndex("FootballFieldId");
-
-                    b.HasIndex("TimeSlotId");
-
-                    b.ToTable("FieldPriceSchedules");
-                });
-
-            modelBuilder.Entity("Entities.Concrete.FootballField", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("BusinessId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("FieldName")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BusinessId");
-
-                    b.ToTable("FootballFields");
+                    b.ToTable("Lists");
                 });
 
             modelBuilder.Entity("Entities.Concrete.OperationClaim", b =>
@@ -182,6 +98,67 @@ namespace DataAccess.Migrations
                     b.ToTable("OperationClaims");
                 });
 
+            modelBuilder.Entity("Entities.Concrete.RentalHouse", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("DistrictId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("OwnerUserId")
+                        .HasColumnType("integer");
+
+                    b.Property<decimal>("PricePerNight")
+                        .HasColumnType("numeric");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DistrictId");
+
+                    b.HasIndex("OwnerUserId");
+
+                    b.ToTable("RentalHouses");
+                });
+
+            modelBuilder.Entity("Entities.Concrete.RentalHouseDatePrice", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("numeric");
+
+                    b.Property<int>("RentalHouseId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RentalHouseId");
+
+                    b.ToTable("RentalHouseDatePrices");
+                });
+
             modelBuilder.Entity("Entities.Concrete.Reservation", b =>
                 {
                     b.Property<int>("Id")
@@ -190,30 +167,36 @@ namespace DataAccess.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("FieldPriceScheduleId")
-                        .HasColumnType("integer");
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("timestamp with time zone");
 
-                    b.Property<decimal>("FinalPrice")
+                    b.Property<decimal>("PaidPrice")
                         .HasColumnType("numeric");
 
-                    b.Property<int>("StatusId")
+                    b.Property<int>("RentalHouseId")
                         .HasColumnType("integer");
+
+                    b.Property<int>("ReservationStatusId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("UserId")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("FieldPriceScheduleId");
+                    b.HasIndex("RentalHouseId");
 
-                    b.HasIndex("StatusId");
+                    b.HasIndex("ReservationStatusId");
 
                     b.HasIndex("UserId");
 
                     b.ToTable("Reservations");
                 });
 
-            modelBuilder.Entity("Entities.Concrete.Status", b =>
+            modelBuilder.Entity("Entities.Concrete.ReservationStatus", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -227,26 +210,7 @@ namespace DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Statuses");
-                });
-
-            modelBuilder.Entity("Entities.Concrete.TimeSlot", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<TimeSpan>("EndTime")
-                        .HasColumnType("interval");
-
-                    b.Property<TimeSpan>("StartTime")
-                        .HasColumnType("interval");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("TimeSlots");
+                    b.ToTable("ReservationStatuses");
                 });
 
             modelBuilder.Entity("Entities.Concrete.User", b =>
@@ -289,6 +253,34 @@ namespace DataAccess.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("Entities.Concrete.UserList", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ListId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("OwnerId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ListId");
+
+                    b.HasIndex("OwnerId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserLists");
+                });
+
             modelBuilder.Entity("Entities.Concrete.UserOperationClaim", b =>
                 {
                     b.Property<int>("Id")
@@ -312,25 +304,6 @@ namespace DataAccess.Migrations
                     b.ToTable("UserOperationClaims");
                 });
 
-            modelBuilder.Entity("Entities.Concrete.Business", b =>
-                {
-                    b.HasOne("Entities.Concrete.District", "District")
-                        .WithMany("Businesses")
-                        .HasForeignKey("DistrictId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Entities.Concrete.User", "User")
-                        .WithMany("UserBusinesses")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("District");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("Entities.Concrete.District", b =>
                 {
                     b.HasOne("Entities.Concrete.City", "City")
@@ -342,67 +315,86 @@ namespace DataAccess.Migrations
                     b.Navigation("City");
                 });
 
-            modelBuilder.Entity("Entities.Concrete.FieldPriceSchedule", b =>
+            modelBuilder.Entity("Entities.Concrete.RentalHouse", b =>
                 {
-                    b.HasOne("Entities.Concrete.Day", "Day")
-                        .WithMany("FieldPriceSchedules")
-                        .HasForeignKey("DayId")
+                    b.HasOne("Entities.Concrete.District", "District")
+                        .WithMany("RentalHouses")
+                        .HasForeignKey("DistrictId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Entities.Concrete.FootballField", "FootballField")
-                        .WithMany("PriceSchedules")
-                        .HasForeignKey("FootballFieldId")
+                    b.HasOne("Entities.Concrete.User", "OwnerUser")
+                        .WithMany("RentalHouses")
+                        .HasForeignKey("OwnerUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Entities.Concrete.TimeSlot", "TimeSlot")
-                        .WithMany("FieldPriceSchedules")
-                        .HasForeignKey("TimeSlotId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("District");
 
-                    b.Navigation("Day");
-
-                    b.Navigation("FootballField");
-
-                    b.Navigation("TimeSlot");
+                    b.Navigation("OwnerUser");
                 });
 
-            modelBuilder.Entity("Entities.Concrete.FootballField", b =>
+            modelBuilder.Entity("Entities.Concrete.RentalHouseDatePrice", b =>
                 {
-                    b.HasOne("Entities.Concrete.Business", "Business")
-                        .WithMany("FootballFields")
-                        .HasForeignKey("BusinessId")
+                    b.HasOne("Entities.Concrete.RentalHouse", "RentalHouse")
+                        .WithMany("DatePrices")
+                        .HasForeignKey("RentalHouseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Business");
+                    b.Navigation("RentalHouse");
                 });
 
             modelBuilder.Entity("Entities.Concrete.Reservation", b =>
                 {
-                    b.HasOne("Entities.Concrete.FieldPriceSchedule", "FieldPriceSchedule")
+                    b.HasOne("Entities.Concrete.RentalHouse", "RentalHouse")
                         .WithMany("Reservations")
-                        .HasForeignKey("FieldPriceScheduleId")
+                        .HasForeignKey("RentalHouseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Entities.Concrete.Status", "Status")
+                    b.HasOne("Entities.Concrete.ReservationStatus", "ReservationStatus")
                         .WithMany("Reservations")
-                        .HasForeignKey("StatusId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey("ReservationStatusId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Entities.Concrete.User", "User")
-                        .WithMany("Reservations")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("RentalHouse");
+
+                    b.Navigation("ReservationStatus");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Entities.Concrete.UserList", b =>
+                {
+                    b.HasOne("Entities.Concrete.List", "List")
+                        .WithMany("UserLists")
+                        .HasForeignKey("ListId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Entities.Concrete.User", "Owner")
+                        .WithMany("OwnedLists")
+                        .HasForeignKey("OwnerId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Entities.Concrete.User", "User")
+                        .WithMany("UserLists")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("FieldPriceSchedule");
+                    b.Navigation("List");
 
-                    b.Navigation("Status");
+                    b.Navigation("Owner");
 
                     b.Navigation("User");
                 });
@@ -426,34 +418,19 @@ namespace DataAccess.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Entities.Concrete.Business", b =>
-                {
-                    b.Navigation("FootballFields");
-                });
-
             modelBuilder.Entity("Entities.Concrete.City", b =>
                 {
                     b.Navigation("Districts");
                 });
 
-            modelBuilder.Entity("Entities.Concrete.Day", b =>
-                {
-                    b.Navigation("FieldPriceSchedules");
-                });
-
             modelBuilder.Entity("Entities.Concrete.District", b =>
                 {
-                    b.Navigation("Businesses");
+                    b.Navigation("RentalHouses");
                 });
 
-            modelBuilder.Entity("Entities.Concrete.FieldPriceSchedule", b =>
+            modelBuilder.Entity("Entities.Concrete.List", b =>
                 {
-                    b.Navigation("Reservations");
-                });
-
-            modelBuilder.Entity("Entities.Concrete.FootballField", b =>
-                {
-                    b.Navigation("PriceSchedules");
+                    b.Navigation("UserLists");
                 });
 
             modelBuilder.Entity("Entities.Concrete.OperationClaim", b =>
@@ -461,21 +438,25 @@ namespace DataAccess.Migrations
                     b.Navigation("UserOperationClaims");
                 });
 
-            modelBuilder.Entity("Entities.Concrete.Status", b =>
+            modelBuilder.Entity("Entities.Concrete.RentalHouse", b =>
                 {
+                    b.Navigation("DatePrices");
+
                     b.Navigation("Reservations");
                 });
 
-            modelBuilder.Entity("Entities.Concrete.TimeSlot", b =>
+            modelBuilder.Entity("Entities.Concrete.ReservationStatus", b =>
                 {
-                    b.Navigation("FieldPriceSchedules");
+                    b.Navigation("Reservations");
                 });
 
             modelBuilder.Entity("Entities.Concrete.User", b =>
                 {
-                    b.Navigation("Reservations");
+                    b.Navigation("OwnedLists");
 
-                    b.Navigation("UserBusinesses");
+                    b.Navigation("RentalHouses");
+
+                    b.Navigation("UserLists");
 
                     b.Navigation("UserOperationClaims");
                 });
