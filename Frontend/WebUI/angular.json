@@ -25,13 +25,21 @@
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
+              "src/assets",
               {
                 "glob": "**/*",
-                "input": "public"
+                "input": "src/assets/plugins/global/fonts",
+                "output": "assets/fonts/"
               }
             ],
             "styles": [
-              "src/styles.scss"
+              "src/styles.scss",
+              "src/assets/plugins/global/plugins.bundle.css",
+              "src/assets/css/style.bundle.css"
+            ],
+            "scripts": [
+              "src/assets/plugins/global/plugins.bundle.js",
+              "src/assets/js/scripts.bundle.js"
             ],
             "server": "src/main.server.ts",
             "outputMode": "server",

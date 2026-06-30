@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Core.Aspects.Autofac.Caching;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using System;
@@ -20,7 +21,7 @@ namespace Business.Concrete
         {
             return _userDal.GetClaims(user);
         }
-
+        [CacheAspect]
         public void Add(User user)
         {
             _userDal.Add(user);

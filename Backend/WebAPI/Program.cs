@@ -13,8 +13,17 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddCors();
-
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAngularApp",
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:4200") // Sadece bizim Angular projesine izin ver
+                  .AllowAnyHeader()                   // Gelen tüm HTTP başlıklarına (Content-Type, Authorization vb.) izin ver
+                  .AllowAnyMethod()                   // GET, POST, PUT, DELETE hepsine izin ver
+                  .AllowCredentials();                // İleride JWT Cookie kullanırsak sorun çıkmasın diye izin ver
+        });
+});
 // 💡 Eski "Configuration" yerine artık "builder.Configuration" kullanıyoruz
 var tokenOptions = builder.Configuration.GetSection("TokenOptions").Get<TokenOptions>();
 
@@ -63,6 +72,11 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseRouting();
+
+
+app.UseCors("AllowAngularApp");
+
 app.UseAuthorization();
 app.MapControllers();
 
